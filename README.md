@@ -1,7 +1,7 @@
-FT5x06 Tool
+FT5x06 Register Tool
 ===========
 
-Boundary Devices user-space tool used to diagnose and/or update FT5xxx touch controllers.
+User-space tool used to write registers of FT5xxx touch controllers.
 
 This code was largely inspired from the [Focaltech GitHub driver](https://github.com/focaltech-systems/drivers-input-touchscreen-FTS_driver).
 
@@ -18,8 +18,8 @@ Build instructions
 Very straight-forward:
 ```
 $ cd
-$ git clone https://github.com/boundarydevices/ft5x06-tool
-$ cd ft5x06-tool/
+$ git clone https://github.com/xCuri0/ft5x06-register-tool
+$ cd ft5x06-register-tool/
 $ make
 ```
 
@@ -38,29 +38,33 @@ Usage
 
 The tool has an help output which lists all the different parameters.
 ```
-FT5x06 tool usage: ft5x06-tool [OPTIONS]
+FT5x06 tool usage: ft5x06-register-tool [OPTIONS]
 OPTIONS:
 	-a, --address
 		I2C address of the FT5x06 controller (hex). Default is 0x38.
 	-b, --bus
-		I2C bus the FT5x06 controller is on. Default is 2.
-	-c, --chipid
-		Force chip ID to the value (hex). Default is read from controller.
-	-i, --input
-		Input firmware file to flash.
-	-o, --output
-		Output firmware file read from FT5x06.
+		I2C bus the FT5x06 controller is on. Default is 3.
+	-r, --read
+		Read register from address
+	-w, --write
+		Write to register at address
+	-v, --value
+		Value to write to register
 	-h, --help
 		Show this help and exit.
 ```
 
-Here is an example on how to update the FW on our platforms:
+Here is an example on how to write to 0x88 to set the touch polling rate to 60hz:
 ```
-# ft5x06-tool -i firmware.bin
+# ft5x06-register-tool -w 0x88 -v 0x6
+```
+
+Another for reading that same value
+```
+# ft5x06-register-tool -r 0x88
 ```
 
 Limitations
 -----------
 
-* This tool only was tested on a FT5426 chip from our [Tianma display](https://boundarydevices.com/product/bd070lic2/).
-* Reading the firmware back doesn't work properly.
+* This tool only was tested on a FT5435 found in a Redmi Note 4 Snapdragon running Lineage OS 17.1
